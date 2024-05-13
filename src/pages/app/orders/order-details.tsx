@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table,
   TableBody,
@@ -20,6 +21,7 @@ import {
 } from '@/components/ui/table'
 import { priceToBr } from '@/utils/price-to-br'
 
+import { OrderDetailsSkeleton } from './order-details-skeleton'
 import { OrderStatus } from './order-status'
 
 export interface OrderDetailsProps {
@@ -34,18 +36,20 @@ export function OrderDetails({ orderId, open }: OrderDetailsProps) {
     enabled: open,
   })
 
-  if (!order) {
-    return null
-  }
-
   return (
     <DialogContent>
       <DialogHeader>
-        <DialogTitle>Pedido: {order.id}</DialogTitle>
+        <DialogTitle>
+          {order?.id ? (
+            `Pedido: ${order.id}`
+          ) : (
+            <Skeleton className="w-48 h-6" />
+          )}
+        </DialogTitle>
         <DialogDescription>Detalhes do pedido</DialogDescription>
       </DialogHeader>
 
-      {order && (
+      {order ? (
         <div className="space-y-6">
           <Table>
             <TableBody>
@@ -130,6 +134,8 @@ export function OrderDetails({ orderId, open }: OrderDetailsProps) {
             </TableFooter>
           </Table>
         </div>
+      ) : (
+        <OrderDetailsSkeleton />
       )}
     </DialogContent>
   )
